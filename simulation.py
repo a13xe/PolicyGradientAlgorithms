@@ -5,87 +5,144 @@
 ####################################################################################################
 
 import pygame
+import random
 import numpy as np
 
-# Define constants
-WIDTH = 600
-HEIGHT = 400
-FPS = 60
-GRAVITY = 0.05
-THRUST = 0.15
-FUEL = 100
+# Constants
+SCREEN_WIDTH = 1600
+SCREEN_HEIGHT = 900
+GRAVITY = 0.2
+THRUST = -0.6
+FUEL = 2500
+FPS = 30
 
-# Define Lunar Lander class
-class LunarLander:
-    def __init__(self):
-        self.x = WIDTH / 2
-        self.y = 50
-        self.vx = 0
-        self.vy = 0
-        self.angle = 0
-        self.thrust = 0
-        self.fuel = FUEL
-        self.landed = False
-
-    def update(self):
-        self.vy += GRAVITY
-        self.x += self.vx
-        self.y += self.vy
-
-        if self.thrust > 0 and self.fuel > 0:
-            self.vx += THRUST * np.sin(self.angle)
-            self.vy -= THRUST * np.cos(self.angle)
-            self.fuel -= 1
-
-    def draw(self, screen):
-        lander_img = pygame.image.load('Assets/lander.png')
-        lander_img = pygame.transform.scale(lander_img, (90, 130)) 
-        lander_img = pygame.transform.rotate(lander_img, self.angle)
-        lander_rect = lander_img.get_rect(center=(self.x, self.y))
-        screen.blit(lander_img, lander_rect)
+# Colors
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+BLUE = (0, 0, 255)
+RED = (255, 0, 0)
 
 # Initialize Pygame
 pygame.init()
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
+# Create the screen
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Lunar Lander")
+# Load images
+lander_img = pygame.image.load("Assets/lander.png").convert_alpha()
+platform_img = pygame.image.load("Assets/platform.png").convert_alpha()
+# Resize images
+lander_img = pygame.transform.scale(lander_img, (100, 150)) 
+platform_img = pygame.transform.scale(platform_img, (300, 50))
+
+
+
+###################################
+#                                 #
+#    Define Lunar Lander class    #
+#                                 #
+###################################
+class LunarLander(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.angle = 0
+        self.image = pygame.transform.rotate(lander_img, self.angle)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.vel_x = 0
+        self.vel_y = 0
+        self.fuel = FUEL
+        
+    def update(self):
+        # Apply gravity
+        self.vel_y += GRAVITY        
+        self.image = pygame.transform.rotate(lander_img, self.angle)
+        
+        # Apply thrust
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_UP] and self.fuel > 0:
+            self.vel_y += THRUST
+            self.fuel -= 1
+        
+        # Apply turning
+        if keys[pygame.K_LEFT]:
+            self.vel_x -= 0.1
+            self.angle += 1
+        elif keys[pygame.K_RIGHT]:
+            self.vel_x += 0.1
+            self.angle -= 1
+        
+        # Move the player
+        self.rect.x += self.vel_x
+        self.rect.y += self.vel_y
+        
+        # Check for collision with the platform
+        if self.rect.colliderect(platform.rect):
+            if self.vel_y > 2:
+                print("Landed!")
+                self.kill()
+            else:
+                print("Crashed!")
+                self.kill()
+        # Check for out of screen
+        if self.rect.x > SCREEN_WIDTH or self.rect.x < 0 or self.rect.y > SCREEN_HEIGHT or self.rect.y < 0:
+            print("Crashed!")
+            self.kill()
+
+
+
+###############################
+#                             #
+#    Define platform class    #
+#                             #
+###############################
+class Platform(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.image = platform_img
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+
+
+####################
+#                  #
+#    Initialize    #
+#                  #
+####################
+# Create the sprites
+player = LunarLander(SCREEN_WIDTH/2, 0)
+platform = Platform(random.randint(0, SCREEN_WIDTH-150), SCREEN_HEIGHT-70)
+# Create the sprite groups
+all_sprites = pygame.sprite.Group()
+all_sprites.add(player, platform)
+# Create the clock
 clock = pygame.time.Clock()
 
-# Create Lunar Lander object
-lander = LunarLander()
 
-# Main game loop
+
+######################
+#                    #
+#    Run the game    #
+#                    #
+######################
 running = True
 while running:
     # Handle events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                lander.thrust = THRUST
-            elif event.key == pygame.K_LEFT:
-                lander.angle += 5
-            elif event.key == pygame.K_RIGHT:
-                lander.angle -= 5
-        elif event.type == pygame.KEYUP:
-            if event.key == pygame.K_SPACE:
-                lander.thrust = 0
-
-    # Update game state
-    lander.update()
-
-    # Check for landing
-    if lander.y >= HEIGHT - 20:
-        lander.landed = True
-
-    # Draw game objects
-    screen.fill((0, 0, 0))
-    lander.draw(screen)
-
-    # Update display
+    # Update the game
+    all_sprites.update()
+    # Draw the screen
+    screen.fill(BLACK)
+    all_sprites.draw(screen)
     pygame.display.flip()
-
-    # Wait for next frame
+    # Limit the frame rate
     clock.tick(FPS)
 
-# Clean up Pygame
+
+
+# Quit Pygame
 pygame.quit()

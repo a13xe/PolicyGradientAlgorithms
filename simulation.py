@@ -9,12 +9,12 @@ import random
 import numpy as np
 
 # Constants
-SCREEN_WIDTH = 1600
+SCREEN_WIDTH = 900
 SCREEN_HEIGHT = 900
 GRAVITY = 0.2
 THRUST = -0.6
-FUEL = 2500
-FPS = 30
+FUEL = 1000
+FPS = 60
 
 # Colors
 WHITE = (255, 255, 255)
@@ -31,8 +31,8 @@ pygame.display.set_caption("Lunar Lander")
 lander_img = pygame.image.load("Assets/lander.png").convert_alpha()
 platform_img = pygame.image.load("Assets/platform.png").convert_alpha()
 # Resize images
-lander_img = pygame.transform.scale(lander_img, (100, 150)) 
-platform_img = pygame.transform.scale(platform_img, (300, 50))
+lander_img = pygame.transform.scale(lander_img, (90, 140)) 
+platform_img = pygame.transform.scale(platform_img, (250, 45))
 
 
 
@@ -72,13 +72,14 @@ class LunarLander(pygame.sprite.Sprite):
             self.vel_x += 0.1
             self.angle -= 1
         
-        # Move the player
+        # Move lander
         self.rect.x += self.vel_x
         self.rect.y += self.vel_y
         
+        print("VelX: {:.2f}".format(self.vel_x), "VelY: {:.2f}".format(self.vel_y), "X: {:.2f}".format(self.rect.x), "Y: {:.2f}".format(self.rect.y), "FUEL: {:.2f}".format(self.fuel))
         # Check for collision with the platform
         if self.rect.colliderect(platform.rect):
-            if self.vel_y > 2:
+            if (self.vel_y < 4) and (self.vel_x < 0.25) and (self.vel_x > -0.25):
                 print("Landed!")
                 self.kill()
             else:
@@ -112,11 +113,13 @@ class Platform(pygame.sprite.Sprite):
 #                  #
 ####################
 # Create the sprites
-player = LunarLander(SCREEN_WIDTH/2, 0)
+lander = LunarLander(SCREEN_WIDTH/2, 0)
+lander = LunarLander(random.randint(0, SCREEN_WIDTH-150), 0)
+platform = Platform(random.randint(0, SCREEN_WIDTH-150), SCREEN_HEIGHT-70)
 platform = Platform(random.randint(0, SCREEN_WIDTH-150), SCREEN_HEIGHT-70)
 # Create the sprite groups
 all_sprites = pygame.sprite.Group()
-all_sprites.add(player, platform)
+all_sprites.add(lander, platform)
 # Create the clock
 clock = pygame.time.Clock()
 

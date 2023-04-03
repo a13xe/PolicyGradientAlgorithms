@@ -26,12 +26,14 @@ RED = (255, 0, 0)
 pygame.init()
 # Create the screen
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Lunar Lander")
+pygame.display.set_caption("Lunar Lander simulation")
 # Load images
+crash_img = pygame.image.load("Assets/crash.png").convert_alpha()
 lander_img = pygame.image.load("Assets/lander.png").convert_alpha()
 platform_img = pygame.image.load("Assets/platform.png").convert_alpha()
 # Resize images
-lander_img = pygame.transform.scale(lander_img, (90, 140)) 
+crash_img = pygame.transform.scale(lander_img, (160, 160)) 
+lander_img = pygame.transform.scale(lander_img, (160, 160)) 
 platform_img = pygame.transform.scale(platform_img, (250, 45))
 
 
@@ -79,16 +81,19 @@ class LunarLander(pygame.sprite.Sprite):
         print("VelX:{:.2f} ".format(self.vel_x), "VelY:{:.2f} ".format(self.vel_y), "X:{:.2f} ".format(self.rect.x), "Y:{:.2f} ".format(self.rect.y), "FUEL:{:.2f} ".format(self.fuel))
         # Check for collision with the platform
         if self.rect.colliderect(platform.rect):
-            if (self.vel_y < 4) and (self.vel_x < 0.25) and (self.vel_x > -0.25):
-                print("Landed!")
-                self.kill()
+            if (self.vel_y < 8) and (self.vel_x < 0.5) and (self.vel_x > -0.5):
+                print("========================\nLanded!\n========================")
+                self = LunarLander.__init__(self, SCREEN_WIDTH/3, 0)
+                # self.kill()
             else:
-                print("Crashed!")
-                self.kill()
+                print("========================\nCrashed!\n========================")
+                self = LunarLander.__init__(self, SCREEN_WIDTH/3, 0)
+                # self.kill()
         # Check for out of screen
-        if (self.rect.x > SCREEN_WIDTH+50) or (self.rect.x < -50) or (self.rect.y > SCREEN_HEIGHT+50) or (self.rect.y < -50):
-            print("Crashed!")
-            self.kill()
+        elif (self.rect.x > SCREEN_WIDTH+50) or (self.rect.x < -50) or (self.rect.y > SCREEN_HEIGHT+50) or (self.rect.y < -50):
+            self = LunarLander.__init__(self, SCREEN_WIDTH/3, 0)
+            print("========================\nCrashed!\n========================")
+            # self.kill()
 
 
 
@@ -113,10 +118,10 @@ class Platform(pygame.sprite.Sprite):
 #                  #
 ####################
 # Create the sprites
-lander = LunarLander(SCREEN_WIDTH/2, 0)
-lander = LunarLander(random.randint(0, SCREEN_WIDTH-150), 0)
-platform = Platform(random.randint(0, SCREEN_WIDTH-150), SCREEN_HEIGHT-70)
-platform = Platform(random.randint(0, SCREEN_WIDTH-150), SCREEN_HEIGHT-70)
+lander = LunarLander(SCREEN_WIDTH/3, 0)
+# lander = LunarLander(random.randint(0, SCREEN_WIDTH-150), 0)
+platform = Platform(SCREEN_WIDTH-SCREEN_WIDTH/3, SCREEN_HEIGHT-70)
+# platform = Platform(random.randint(0, SCREEN_WIDTH-150), SCREEN_HEIGHT-70)
 # Create the sprite groups
 all_sprites = pygame.sprite.Group()
 all_sprites.add(lander, platform)

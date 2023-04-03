@@ -13,7 +13,7 @@ SCREEN_WIDTH = 900
 SCREEN_HEIGHT = 900
 GRAVITY = 0.2
 THRUST = -0.6
-FUEL = 1000
+FUEL = 100
 FPS = 60
 
 # Colors
@@ -55,7 +55,7 @@ class LunarLander(pygame.sprite.Sprite):
         self.vel_y = 0
         self.fuel = FUEL
         
-    def update(self):
+    def update(self):        
         # Apply gravity
         self.vel_y += GRAVITY        
         self.image = pygame.transform.rotate(lander_img, self.angle)
@@ -79,20 +79,25 @@ class LunarLander(pygame.sprite.Sprite):
         self.rect.y += self.vel_y
         
         print("VelX:{:.2f} ".format(self.vel_x), "VelY:{:.2f} ".format(self.vel_y), "X:{:.2f} ".format(self.rect.x), "Y:{:.2f} ".format(self.rect.y), "FUEL:{:.2f} ".format(self.fuel))
-        # Check for collision with the platform
+        ###############################################
+        #    Check for collision with the platform    #
+        ###############################################
         if self.rect.colliderect(platform.rect):
             if (self.vel_y < 8) and (self.vel_x < 0.5) and (self.vel_x > -0.5):
                 print("========================\nLanded!\n========================")
+                # go again
                 self = LunarLander.__init__(self, SCREEN_WIDTH/3, 0)
-                # self.kill()
             else:
                 print("========================\nCrashed!\n========================")
                 self = LunarLander.__init__(self, SCREEN_WIDTH/3, 0)
-                # self.kill()
-        # Check for out of screen
+                # go again
+        #################################
+        #    Check for out of screen    #
+        #################################
         elif (self.rect.x > SCREEN_WIDTH+50) or (self.rect.x < -50) or (self.rect.y > SCREEN_HEIGHT+50) or (self.rect.y < -50):
-            self = LunarLander.__init__(self, SCREEN_WIDTH/3, 0)
             print("========================\nCrashed!\n========================")
+            # go again
+            self = LunarLander.__init__(self, SCREEN_WIDTH/3, 0)
             # self.kill()
 
 

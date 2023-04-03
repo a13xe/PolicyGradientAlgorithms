@@ -76,7 +76,7 @@ class LunarLander(pygame.sprite.Sprite):
         self.rect.x += self.vel_x
         self.rect.y += self.vel_y
         
-        print("VelX: {:.2f}".format(self.vel_x), "VelY: {:.2f}".format(self.vel_y), "X: {:.2f}".format(self.rect.x), "Y: {:.2f}".format(self.rect.y), "FUEL: {:.2f}".format(self.fuel))
+        print("VelX:{:.2f} ".format(self.vel_x), "VelY:{:.2f} ".format(self.vel_y), "X:{:.2f} ".format(self.rect.x), "Y:{:.2f} ".format(self.rect.y), "FUEL:{:.2f} ".format(self.fuel))
         # Check for collision with the platform
         if self.rect.colliderect(platform.rect):
             if (self.vel_y < 4) and (self.vel_x < 0.25) and (self.vel_x > -0.25):
@@ -86,7 +86,7 @@ class LunarLander(pygame.sprite.Sprite):
                 print("Crashed!")
                 self.kill()
         # Check for out of screen
-        if self.rect.x > SCREEN_WIDTH or self.rect.x < 0 or self.rect.y > SCREEN_HEIGHT or self.rect.y < 0:
+        if (self.rect.x > SCREEN_WIDTH+50) or (self.rect.x < -50) or (self.rect.y > SCREEN_HEIGHT+50) or (self.rect.y < -50):
             print("Crashed!")
             self.kill()
 

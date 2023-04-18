@@ -2,7 +2,8 @@ import pygame
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
-from tensorflow.keras import layers
+# from tensorflow.keras import layers
+from tensorflow.python.keras.layers import Dense
 
 import simulation
 num_episodes = 10
@@ -16,9 +17,9 @@ game = simulation.LunarLander()
 # Set up the policy network
 policy_model = keras.Sequential(
     [
-        layers.Dense(32, activation="relu", input_shape=(game.observation_space,)),
-        layers.Dense(32, activation="relu"),
-        layers.Dense(game.action_space, activation="softmax"),
+        Dense(32, activation="relu", input_shape=(game.observation_space,)),
+        Dense(32, activation="relu"),
+        Dense(game.action_space, activation="softmax"),
     ]
 )
 
@@ -32,7 +33,7 @@ for episode in range(num_episodes):
     episode_reward = 0
 
     with tf.GradientTape() as tape:
-        for timestep in range(max_timesteps):
+        for _ in range(max_timesteps):
             # Get the policy network's action predictions
             logits = policy_model(observation.reshape(1, -1))
             action = np.random.choice(game.action_space, p=np.squeeze(logits))

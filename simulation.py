@@ -28,7 +28,6 @@ pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Lunar Lander simulation")
 # Load images
-crash_img = pygame.image.load("Assets/crash.png").convert_alpha()
 lander_img = pygame.image.load("Assets/lander.png").convert_alpha()
 platform_img = pygame.image.load("Assets/platform.png").convert_alpha()
 # Resize images
@@ -84,12 +83,12 @@ class LunarLander(pygame.sprite.Sprite):
         ###############################################
         if self.rect.colliderect(platform.rect):
             if (self.vel_y < 8) and (self.vel_x < 0.5) and (self.vel_x > -0.5):
+                
                 print("========================\nLanded!\n========================")
                 # go again
-                self = LunarLander.__init__(self, SCREEN_WIDTH/3, 0)
             else:
                 print("========================\nCrashed!\n========================")
-                self = LunarLander.__init__(self, SCREEN_WIDTH/3, 0)
+            self = LunarLander.__init__(self, SCREEN_WIDTH/3, 0)
                 # go again
         #################################
         #    Check for out of screen    #

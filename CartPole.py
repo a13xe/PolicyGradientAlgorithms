@@ -4,14 +4,14 @@ import gym
 import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense, Flatten
-from keras.optimizers import Adama
+from keras.optimizers import Adam
 from rl.agents import DQNAgent
 from rl.policy import BoltzmannQPolicy
 from rl.memory import SequentialMemory 
 
 
 # создание среды
-env = gym.make("CartPole-v1", render_mode="human")
+env = gym.make("CartPole-v1") # render_mode="human" - для визуализации
 
  
 # количество состояний
@@ -43,9 +43,11 @@ agent = DQNAgent(
     target_model_update=0.01    
 )
 
+
+# обучение
 # компиляция модели с помощью оптимизатора Адама
 agent.compile(Adam(learning_rate=0.001), metrics=["mae"])
-agent.fit(env, nb_steps=100000, visualize=True, verbose=1)
+agent.fit(env, nb_steps=100000, visualize=False, verbose=1)
 
 # оценка модели
 results = agent.test(env, nb_episodes=10, visualize=True)

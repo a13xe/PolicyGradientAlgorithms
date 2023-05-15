@@ -12,7 +12,7 @@ from keras.optimizers import Adam
 
 
 # модель для загрузки
-model_to_load = "Models/cartpole_model.h5"
+model_to_load = "Models/cartpole_model_85000.h5"
 # создание среды
 env = gym.make("CartPole-v1") # render_mode="human" - параметр для визуализации обучения
 # количество состояний
@@ -55,10 +55,9 @@ else:
     # компиляция модели с помощью оптимизатора Адама
     agent.compile(Adam(learning_rate=0.001), metrics=["mae"])
     # шаги обучения
-    agent.fit(env, nb_steps=10000, visualize=False, verbose=1)
-
+    agent.fit(env, nb_steps=85000, visualize=False, verbose=1)
     # Сохранение модели
-    model.save("Models/cartpole_model_10000.h5")
+    model.save("Models/cartpole_model_85000.h5")
 
 
 # оценка модели - тестовые запуски

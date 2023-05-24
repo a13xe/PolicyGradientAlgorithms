@@ -69,11 +69,11 @@ def random_policy(observation):
 
 
 # Set up the environment
-env = gym.make('CartPole-v1')
+env = gym.make('CartPole-v1') # render_mode="human"
 
 # Training parameters
-learning_rate = 0.0001
-num_episodes = 100000
+learning_rate = 0.01
+num_episodes = 10000
 
 # Run VPG
 vpg_rewards = vpg(env, random_policy, learning_rate, num_episodes)
@@ -95,14 +95,14 @@ plt.legend()
 plt.show()
 
 # Run 10 visualized test episodes for each algorithm
-test_episodes = 10
-for _ in range(test_episodes):
-    observation = env.reset()
-    done = False
+# test_episodes = 10
+# for _ in range(test_episodes):
+#     observation = env.reset()
+#     done = False
 
-    while not done:
-        action = random_policy(observation)
-        observation, _, done, _ = env.step(action)
-        env.render()
+#     while not done:
+#         action = random_policy(observation)
+#         observation, _, done, _ = env.step(action)
+#         env.render()
 
 env.close()

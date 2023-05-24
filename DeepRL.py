@@ -22,7 +22,7 @@ from keras.optimizers import Adam
 
 
 
-model_to_load = "Models/DRLmodel_4080-0.h5" # модель для загрузки
+model_to_load = "Models/DRLmodel_40800.h5" # модель для загрузки
 
 
 # создание среды
@@ -66,7 +66,7 @@ else: # Создание новой модели нейронной машины
     # Визуализация вознаграждений
     plt.plot(np.arange(1, len(rewards.history["episode_reward"]) + 1), rewards.history["episode_reward"])
     plt.style.use('seaborn-darkgrid')
-    plt.title("CartPole", fontsize=14)
+    plt.title("DeepRL", fontsize=14)
     plt.xlabel("episode", fontsize=12)
     plt.ylabel("reward", fontsize=12)
     plt.savefig('Rewards/DRL_rewards.png')

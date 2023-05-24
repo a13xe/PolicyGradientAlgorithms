@@ -79,7 +79,7 @@ def train(policy, num_episodes, gamma, optimizer):
     plt.xlabel('Episode')
     plt.ylabel('Reward')
     plt.title('Training Progress')
-    plt.save()
+    plt.savefig('Rewards/VPG_rewards.png')
 
 
 def visualize_episodes(policy, num_episodes):
@@ -100,8 +100,8 @@ def visualize_episodes(policy, num_episodes):
 
 
 
-# обучение на 500 эпизодах
-num_episodes = 500
+# обучение
+num_episodes = 200
 gamma = 0.99
 learning_rate = 0.01
 optimizer = optim.Adam(policy.parameters(), lr=learning_rate)

@@ -17,7 +17,7 @@ Installation
 pip install matplotlib gym==0.25.2 tensorflow keras-rl2 pyglet protobuf==3.20.*
 ```
 
-500 episodes training result 
+Training results
 ======================================================================================
 
-![graph_500ep_](https://github.com/AlexeyLepov/PolicyGradientAlgorithms/assets/77492646/28e48346-3886-4f59-b218-adc05d54dcf3)
+![graph_500ep_](https://github.com/AlexeyLepov/PolicyGradientAlgorithms/assets/77492646/6a428e0d-9636-4c4e-9211-77859326d310)

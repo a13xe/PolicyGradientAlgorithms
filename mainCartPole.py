@@ -17,73 +17,56 @@ def run_episode(env, policy):
     observation = env.reset()
     total_reward = 0
     done = False
-
     while not done:
         action = policy(observation)
         next_observation, reward, done, _ = env.step(action)
         total_reward += reward
         observation = next_observation
-
     return total_reward
 
 
 def vpg(env, policy, learning_rate, num_episodes):
     rewards = []
-    
-    for episode in range(num_episodes):
+    for _ in range(num_episodes):
         episode_reward = 0
         state = env.reset()
         done = False
-        
         while not done:
             action = policy(state)  # Sample action from the policy function
             next_state, reward, done, _ = env.step(action)
             episode_reward += reward
-            
             state = next_state
-        
         rewards.append(episode_reward)
-    
     return rewards
 
 
 def ppo(env, policy, learning_rate, num_episodes):
     rewards = []
-    
-    for episode in range(num_episodes):
+    for _ in range(num_episodes):
         episode_reward = 0
         state = env.reset()
         done = False
-        
         while not done:
             action = policy(state)  # Sample action from the policy function
             next_state, reward, done, _ = env.step(action)
             episode_reward += reward
-            
             state = next_state
-        
         rewards.append(episode_reward)
-    
     return rewards
 
 
 def trpo(env, policy, learning_rate, num_episodes):
     rewards = []
-    
-    for episode in range(num_episodes):
+    for _ in range(num_episodes):
         episode_reward = 0
         state = env.reset()
         done = False
-        
         while not done:
             action = policy(state)  # Sample action from the policy function
             next_state, reward, done, _ = env.step(action)
             episode_reward += reward
-            
             state = next_state
-        
         rewards.append(episode_reward)
-    
     return rewards
 
 
@@ -91,7 +74,6 @@ def trpo(env, policy, learning_rate, num_episodes):
 class RandomPolicy:
     def __init__(self, action_space):
         self.action_space = action_space
-    
     def __call__(self, observation):
         return self.action_space.sample()
 
